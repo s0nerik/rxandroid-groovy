@@ -9,16 +9,16 @@ import rx.schedulers.Schedulers
 @CompileStatic
 class RxAndroidExtensions {
     static <T> Observable<T> applySchedulers(final Observable<T> observable) {
-        observable.compose({
-                    it.subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-        } as Observable.Transformer)
+        observable.compose({ Observable<T> it ->
+            it.subscribeOn(Schedulers.io())
+              .observeOn(AndroidSchedulers.mainThread())
+        } as Observable.Transformer<T, T>)
     }
 
     static <T> Observable<T> applySchedulers(final Observable<T> observable, Scheduler subscribeOn, Scheduler observeOn) {
-        observable.compose({
+        observable.compose({ Observable<T> it ->
             it.subscribeOn(subscribeOn)
-                    .observeOn(observeOn)
-        } as Observable.Transformer)
+              .observeOn(observeOn)
+        } as Observable.Transformer<T, T>)
     }
 }
